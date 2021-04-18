@@ -18,3 +18,8 @@ func (s *StockStoreRespository) FindAll() []models.Stock {
 	s.DB.Find(&stock)
 	return stock
 }
+
+func (s *StockStoreRespository) Save(stock models.Stock) models.Stock {
+	s.DB.Save(&stock)
+	return stock
+}
