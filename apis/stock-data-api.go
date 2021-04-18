@@ -1,6 +1,9 @@
 package apis
 
 import (
+	"net/http"
+
+	"github.com/echenim/corelightfx/mappers"
 	"github.com/echenim/corelightfx/services"
 	"github.com/gin-gonic/gin"
 )
@@ -14,5 +17,6 @@ func ProviderStockAPI(s services.StockService) StockAPI {
 }
 
 func (s *StockAPI) FindAll(ctx *gin.Context) {
-
+	stocks := s.stockService.FindAll()
+	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
 }
