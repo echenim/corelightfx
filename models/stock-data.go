@@ -1,0 +1,63 @@
+package models
+
+import "time"
+
+type Stock struct {
+	ID                     int64 `gorm:"primaryKey"`
+	Symbol                 string
+	CompanyName            string
+	PrimaryExchange        string
+	CalculationPrice       string
+	Open                   float64
+	OpenTime               int64
+	OpenSource             string
+	Close                  float64
+	CloseTime              int64
+	CloseSource            string
+	High                   int64
+	HighTime               int64
+	HighSource             string
+	Low                    float64
+	LowTime                int64
+	LowSource              string
+	LatestPrice            float64
+	LatestSource           string
+	LatestTime             string
+	LatestUpdate           int64
+	LatestVolume           int64
+	IexRealtimePrice       float32
+	IexRealtimeSize        int64
+	IexLastUpdated         int64
+	DelayedPrice           float64
+	DelayedPriceTime       int64
+	OddLotDelayedPrice     float64
+	OddLotDelayedPriceTime int64
+	ExtendedPrice          float64
+	ExtendedChange         float64
+	ExtendedChangePercent  float64
+	ExtendedPriceTime      int64
+	PreviousClose          float64
+	PreviousVolume         int64
+	Change                 float32
+	ChangePercent          float32
+	Volume                 int64
+	IexMarketPercent       float64
+	IexVolume              int64
+	AvgTotalVolume         int64
+	IexBidPrice            int64
+	IexBidSize             int64
+	IexAskPrice            int64
+	IexAskSize             int64
+	IexOpen                int64
+	IexOpenTime            int64
+	IexClose               int64
+	IexCloseTime           int64
+	MarketCap              int64
+	PeRatio                float64
+	Week52High             float64
+	Week52Low              float64
+	YtdChange              float64
+	LastTradeTime          int64
+	IsUSMarketOpen         bool
+	Stamp                  time.Time
+}
