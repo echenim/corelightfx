@@ -2,23 +2,13 @@ package main
 
 import (
 	"github.com/echenim/corelightfx/di"
+	"github.com/echenim/corelightfx/utilities"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 
 	_ "github.com/swaggo/gin-swagger/example/basic/docs"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
-
-func initDb() *gorm.DB {
-	dsn := "host=localhost user=postgres password=nopassword dbname=store-store port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic(err)
-	}
-	return db
-}
 
 // @title API
 // @version 2.5
@@ -35,11 +25,12 @@ func initDb() *gorm.DB {
 // @host petstore.swagger.io
 // @BasePath /v2
 func main() {
-	cn := initDb()
-	c, _ := cn.DB()
+
+	DbStoreLinker := utilities.Instanciate()
+	c, _ := DbStoreLinker.DB()
 	defer c.Close()
 
-	storeAPI := di.InitStockAPI(cn)
+	storeAPI := di.InitStockAPI(DbStoreLinker)
 
 	r := gin.Default()
 	r.Use(gin.Logger())
