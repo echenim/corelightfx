@@ -1,8 +1,6 @@
 package services
 
 import (
-	"time"
-
 	"github.com/echenim/corelightfx/models"
 	"github.com/echenim/corelightfx/repository"
 )
@@ -23,8 +21,8 @@ func (s *StockService) FindByName(name string) models.Stock {
 	return s.stockStoreRespository.FindByName(name)
 }
 
-func (s *StockService) Search(symbol string, t time.Time) []models.Stock {
-	return s.stockStoreRespository.Search(symbol, t)
+func (s *StockService) Search(paramenter []string) []models.Stock {
+	return s.stockStoreRespository.Search(paramenter)
 }
 
 func (s *StockService) Save(stock models.Stock) models.Stock {

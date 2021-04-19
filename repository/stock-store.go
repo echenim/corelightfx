@@ -20,19 +20,19 @@ func ProviderRespository(_DB *gorm.DB) StockStoreRespository {
 
 func (s *StockStoreRespository) FindAll() []models.Stock {
 	var stock []models.Stock
-	s.DB.Find(&stock)
+	s.DB.Find(&stock).Order("stamp desc")
 	return stock
 }
 
 func (s *StockStoreRespository) FindByName(name string) models.Stock {
 	var stock models.Stock
-	s.DB.Where("Symbol =? ", name).Find(&stock)
+	s.DB.Where("Symbol = ? ", name).Find(&stock).Order("stamp desc")
 	return stock
 }
 
-func (s *StockStoreRespository) Search(symbol string, t time.Time) []models.Stock {
+func (s *StockStoreRespository) Search(paramenter []string) []models.Stock {
 	var stock []models.Stock
-	s.DB.Where("Symbol = ? OR LatestSource = ? OR Stamp >= ?", symbol, t).Find(&stock)
+	s.DB.Where("Symbol IN ? ", paramenter).Find(&stock)
 	return stock
 }
 
@@ -41,7 +41,7 @@ func (s *StockStoreRespository) Save(stock models.Stock) models.Stock {
 	return stock
 }
 
-func (s *StockStoreRespository) GetFromProvider(symbol string, token string) {
+func (s *StockStoreRespository) GetStockDataFromProvider(symbol string, token string) {
 	s.getDataFromProvider(symbol, token)
 }
 

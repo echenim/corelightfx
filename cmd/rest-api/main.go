@@ -38,8 +38,7 @@ func main() {
 	r.Use(gin.Recovery())
 
 	r.GET("/stocks", storeAPI.GetAll)
-	r.GET("/stocks/findbyname?name=d", storeAPI.FindByName)
-	r.GET("/stocks/search?name=d&duration=t", storeAPI.SearchNameAndDuration)
+	r.GET("/stocks/:name", storeAPI.FindByName)
 	r.GET("/nasdaq", nasdaqAPI.GetAll)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8082")
