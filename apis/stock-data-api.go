@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/echenim/corelightfx/mappers"
@@ -27,21 +28,19 @@ func (s *StockAPI) Search(stoc models.StockDataSearch, ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
 }
 
-// GetAll godoc
-// @Summary list stocks
-// @Description get accounts
-// @Accept  json
-// @Produce  json
-// @Param q query string false "name search by q"
-// @Success 200 {array} models.Stocks
-// @Header 200 {string} Token "qwerty"
-// @Failure 400,404 {object} httputil.HTTPError
-// @Failure 500 {object} httputil.HTTPError
-// @Failure default {object} httputil.DefaultError
-// @Router /stocks [get]
 func (s *StockAPI) GetAll(ctx *gin.Context) {
-
 	stocks := s.stockService.FindAll()
-	//ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
-	ctx.JSON(http.StatusOK, mappers.ToStockDTOs(stocks))
+	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
+}
+
+func (s *StockAPI) Add(ctx *gin.Context) {
+	var stockDto models.StockDTO
+	err := ctx.BindJSON(&stockDto)
+	if err != nil {
+		log.Fatalln(err)
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+	stocks := s.stockService.Save(stockDto)
+	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTO(stocks)})
 }

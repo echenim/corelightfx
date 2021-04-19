@@ -31,7 +31,7 @@ func (s *StockStoreRespository) Search(stoc models.StockDataSearch) []models.Sto
 	return stock
 }
 
-func (s *StockStoreRespository) Save(stock models.Stock) models.Stock {
+func (s *StockStoreRespository) Save(stock models.StockDTO) models.StockDTO {
 	s.DB.Save(&stock)
 	return stock
 }

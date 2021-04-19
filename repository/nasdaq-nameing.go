@@ -13,7 +13,7 @@ func ProviderNasdaqRespository(_DB *gorm.DB) NasdaqRespository {
 	return NasdaqRespository{DB: _DB}
 }
 
-func (s *NasdaqRespository) Save(nasdaq models.Nasdaq) models.Nasdaq {
+func (s *NasdaqRespository) Save(nasdaq models.NasdaqDTO) models.NasdaqDTO {
 	s.DB.Save(&nasdaq)
 	return nasdaq
 }

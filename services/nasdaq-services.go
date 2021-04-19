@@ -17,7 +17,7 @@ func (s *NasdaqService) FindAll() []models.Nasdaq {
 	return s.nasdaqRespository.FindAll()
 }
 
-func (s *NasdaqService) Save(nasdaq models.Nasdaq) models.Nasdaq {
+func (s *NasdaqService) Save(nasdaq models.NasdaqDTO) models.NasdaqDTO {
 	s.nasdaqRespository.Save(nasdaq)
 	return nasdaq
 }
