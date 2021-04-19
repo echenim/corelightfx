@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/echenim/corelightfx/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type StockStoreRespository struct {
@@ -16,6 +16,18 @@ func ProviderRespository(_DB *gorm.DB) StockStoreRespository {
 func (s *StockStoreRespository) FindAll() []models.Stock {
 	var stock []models.Stock
 	s.DB.Find(&stock)
+	return stock
+}
+
+func (s *StockStoreRespository) FindByName(name string) models.Stock {
+	var stock models.Stock
+	s.DB.Where("Symbol =? ", name).Find(&stock)
+	return stock
+}
+
+func (s *StockStoreRespository) Search(stoc models.StockDataSearch) []models.Stock {
+	var stock []models.Stock
+	s.DB.Where("Symbol = ? OR LatestSource = ? OR Stamp >= ?", stoc.Symbol, stoc.LatestSource, stoc.Stamp).Find(&stock)
 	return stock
 }
 

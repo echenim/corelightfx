@@ -17,6 +17,14 @@ func (s *StockService) FindAll() []models.Stock {
 	return s.stockStoreRespository.FindAll()
 }
 
+func (s *StockService) FindByName(name string) models.Stock {
+	return s.stockStoreRespository.FindByName(name)
+}
+
+func (s *StockService) Search(stoc models.StockDataSearch) []models.Stock {
+	return s.stockStoreRespository.Search(stoc)
+}
+
 func (s *StockService) Save(stock models.Stock) models.Stock {
 	s.stockStoreRespository.Save(stock)
 	return stock

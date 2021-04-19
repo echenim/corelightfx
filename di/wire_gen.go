@@ -9,7 +9,7 @@ import (
 	"github.com/echenim/corelightfx/apis"
 	"github.com/echenim/corelightfx/repository"
 	"github.com/echenim/corelightfx/services"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Injectors from wire.go:

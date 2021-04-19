@@ -5,7 +5,7 @@ import (
 	"github.com/echenim/corelightfx/repository"
 	"github.com/echenim/corelightfx/services"
 	"github.com/google/wire"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 func initStockAPI(db *gorm.DB) apis.StockAPI {
