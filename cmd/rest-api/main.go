@@ -3,8 +3,12 @@ package main
 import (
 	"github.com/echenim/corelightfx/di"
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	_ "github.com/swaggo/gin-swagger/example/basic/docs"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 func initDb() *gorm.DB {
@@ -16,8 +20,8 @@ func initDb() *gorm.DB {
 	return db
 }
 
-// @title Swagger Example API
-// @version 1.0
+// @title API
+// @version 2.5
 // @description This is a sample server Petstore server.
 // @termsOfService http://swagger.io/terms/
 
@@ -28,7 +32,7 @@ func initDb() *gorm.DB {
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host petstore.swagger.io:8080
+// @host petstore.swagger.io
 // @BasePath /v2
 func main() {
 	cn := initDb()
@@ -38,10 +42,32 @@ func main() {
 	storeAPI := di.InitStockAPI(cn)
 
 	r := gin.Default()
-	r.GET("/products", storeAPI.FindAll)
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
-	er := r.Run()
-	if er != nil {
-		panic(er)
+	v1 := r.Group("/api")
+	{
+		s := v1.Group("/stocks")
+		{
+			s.GET("", storeAPI.GetAll)
+		}
+
 	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.Run(":8082")
+
+	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
+	// v1 := r.Group("/api/v1")
+	// {
+	// 	v1.GET("/stocks", storeAPI.FindAll)
+	// 	v1.GET("/stocks/v1", storeAPI.FindAll)
+	// 	v1.GET("/stocks/v2", storeAPI.FindAll)
+	// }
+
+	// er := r.Run()
+	// if er != nil {
+	// 	panic(er)
+	// }
 }
