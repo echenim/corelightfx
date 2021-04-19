@@ -20,3 +20,10 @@ func InitStockAPI(db *gorm.DB) apis.StockAPI {
 	stockAPI := apis.ProviderStockAPI(stockService)
 	return stockAPI
 }
+
+func InitNasdaqAPI(db *gorm.DB) apis.NasdaqAPI {
+	nasdaqRespository := repository.ProviderNasdaqRespository(db)
+	nasdaqService := services.ProviderNasdaqService(nasdaqRespository)
+	nasdaqAPI := apis.ProviderNasdaqAPI(nasdaqService)
+	return nasdaqAPI
+}
