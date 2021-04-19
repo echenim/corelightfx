@@ -13,11 +13,11 @@ func ProviderNasdaqService(s repository.NasdaqRespository) NasdaqService {
 	return NasdaqService{nasdaqRespository: s}
 }
 
-func (s *NasdaqService) FindAll() []models.Nasdaq {
+func (s *NasdaqService) FindAll() []models.Nasdaqs {
 	return s.nasdaqRespository.FindAll()
 }
 
-func (s *NasdaqService) Save(nasdaq models.NasdaqDTO) models.NasdaqDTO {
+func (s *NasdaqService) Save(nasdaq models.Nasdaqs) models.Nasdaqs {
 	s.nasdaqRespository.Save(nasdaq)
 	return nasdaq
 }

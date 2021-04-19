@@ -3,6 +3,7 @@ package apis
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/echenim/corelightfx/mappers"
 	"github.com/echenim/corelightfx/models"
@@ -18,13 +19,17 @@ func ProviderStockAPI(s services.StockService) StockAPI {
 	return StockAPI{stockService: s}
 }
 
-func (s *StockAPI) FindByName(name string, ctx *gin.Context) {
+func (s *StockAPI) FindByName(ctx *gin.Context) {
+	name := ctx.Param("name")
 	stocks := s.stockService.FindByName(name)
 	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTO(stocks)})
 }
 
-func (s *StockAPI) Search(stoc models.StockDataSearch, ctx *gin.Context) {
-	stocks := s.stockService.Search(stoc)
+func (s *StockAPI) SearchNameAndDuration(ctx *gin.Context) {
+
+	name := ctx.Param("name")
+	duration, _ := time.Parse("2006-01-02 15:04", ctx.Param("duration"))
+	stocks := s.stockService.Search(name, duration)
 	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
 }
 
@@ -33,7 +38,7 @@ func (s *StockAPI) GetAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTOs(stocks)})
 }
 
-func (s *StockAPI) Add(ctx *gin.Context) {
+func (s *StockAPI) Create(ctx *gin.Context) {
 	var stockDto models.StockDTO
 	err := ctx.BindJSON(&stockDto)
 	if err != nil {
@@ -41,6 +46,6 @@ func (s *StockAPI) Add(ctx *gin.Context) {
 		ctx.Status(http.StatusBadRequest)
 		return
 	}
-	stocks := s.stockService.Save(stockDto)
+	stocks := s.stockService.Save(mappers.ToStock(stockDto))
 	ctx.JSON(http.StatusOK, gin.H{"stocks": mappers.ToStockDTO(stocks)})
 }

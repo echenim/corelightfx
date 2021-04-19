@@ -31,34 +31,17 @@ func main() {
 	defer c.Close()
 
 	storeAPI := di.InitStockAPI(DbStoreLinker)
+	nasdaqAPI := di.InitNasdaqAPI(DbStoreLinker)
 
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	v1 := r.Group("/api")
-	{
-		s := v1.Group("/stocks")
-		{
-			s.GET("", storeAPI.GetAll)
-		}
-
-	}
+	r.GET("/stocks", storeAPI.GetAll)
+	r.GET("/stocks/findbyname?name=d", storeAPI.FindByName)
+	r.GET("/stocks/search?name=d&duration=t", storeAPI.SearchNameAndDuration)
+	r.GET("/nasdaq", nasdaqAPI.GetAll)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(":8082")
 
-	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
-
-	// v1 := r.Group("/api/v1")
-	// {
-	// 	v1.GET("/stocks", storeAPI.FindAll)
-	// 	v1.GET("/stocks/v1", storeAPI.FindAll)
-	// 	v1.GET("/stocks/v2", storeAPI.FindAll)
-	// }
-
-	// er := r.Run()
-	// if er != nil {
-	// 	panic(er)
-	// }
 }
