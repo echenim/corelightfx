@@ -5,11 +5,11 @@ This is a project for reading current stock data from ixe-cloud.
 ### Endpoints
 ```bash
 /stocks
-GET /stocks
-GET/stocks/:name
+localhost:8082/stocks
+localhost:8082/stocks/:name
 
 /nasdaq
-GET /nasdaq
+localhost:8082/nasdaq
 ```
 ## Installation Instructions
 
@@ -17,10 +17,14 @@ Require Docker.
 ```bash
 Install Docker
 Clone repo
+
 To Start
 docker-compose up
 
 To Start
 docker-compose down
 ```
+
+
+
 
