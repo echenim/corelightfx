@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"reflect"
+	"strings"
 	"time"
 
 	"github.com/echenim/corelightfx/models"
@@ -173,5 +175,25 @@ func (s *StockStoreRespository) save(data models.ProviderStockData) {
 		IsUSMarketOpen:         data.IsUSMarketOpen,
 		Stamp:                  time.Now(),
 	}
-	s.DB.Save(&stock)
+	r := s.migrate()
+	if r == 700 {
+		s.DB.Save(&stock)
+	}
+
+}
+
+func (s *StockStoreRespository) migrate() int {
+	if !s.DB.Migrator().HasTable(&models.Stock{}) {
+		e := s.DB.Migrator().CreateTable(&models.Stock{})
+		if e == nil {
+			tbname := strings.ToLower(reflect.TypeOf(&s).Elem().Name())
+
+			s.DB.Exec("ALTER TABLE " + tbname + "s ALTER COLUMN id drop default;")
+			s.DB.Exec("ALTER TABLE " + tbname + "s ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY ( START 100);")
+			return 700
+		} else {
+			return 701
+		}
+	}
+	return 700
 }
