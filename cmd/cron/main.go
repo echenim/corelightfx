@@ -12,7 +12,7 @@ func main() {
 	var intervalsInMinute int
 	fmt.Print("Enter how often you want to retrieve stock data from provider in munites : ")
 	fmt.Scanf("%d", &intervalsInMinute)
-    
+
 	fmt.Print("Servic has started running ..... : ")
 	cron(intervalsInMinute)
 }
