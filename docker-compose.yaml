@@ -13,22 +13,28 @@ services:
           - fullstack
 
     cron:
+        container_name: corelight-fx-cron
         image: golang:1.16.3-alpine
         volumes: 
             - .:/go/src/corelightfx
-        working_dir: /go/src/corelightfx
-        command: go run ./cmd/cron/main.go
+        working_dir: /go/src/corelightfx        
         networks: 
             - fullstack
         depends_on: 
             - database
+        command: go run ./cmd/cron/main.go
     
-    # web:
-    #    image: golang:1.16.3-alpine
-    #    volumes: 
-    #       - .:/go/src/corelightfx
-    #    working_dir: /go/src/corelightfx
-    #    command: go run ./cmd/rest-api/main.go 
+    web:
+        container_name: corelight-fx-api
+        image: golang:1.16.3-alpine
+        volumes: 
+            - .:/go/src/corelightfx
+        working_dir: /go/src/corelightfx        
+        networks: 
+            - fullstack
+        depends_on: 
+            - database
+        command: go run ./cmd/rest-api/main.go
 
 networks: 
     fullstack:

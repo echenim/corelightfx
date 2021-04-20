@@ -7,7 +7,7 @@ import (
 )
 
 func GetConfig() map[string]interface{} {
-	j, _ := os.Open("/utilities/config.json")
+	j, _ := os.Open("../utilities/config.json")
 	defer j.Close()
 	b, _ := io.ReadAll(j)
 	var settings map[string]interface{}

@@ -1,26 +1,31 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/echenim/corelightfx/repository"
 	"github.com/echenim/corelightfx/utilities"
+	"gorm.io/gorm"
 )
 
 func main() {
-	var intervalsInMinute int
-	fmt.Print("Enter how often you want to retrieve stock data from provider in munites : ")
-	fmt.Scanf("%d", &intervalsInMinute)
+	config := GetConfig()
+	intervals, _ := strconv.Atoi(config["intervalInMinute"])
 
-	fmt.Print("Servic has started running ..... : ")
-	cron(intervalsInMinute)
-}
+	fmt.Println("Timer inter of ", intervals, " minute has been set")
 
-func cron(intervalsInMinute int) {
 	DbStoreLinker := utilities.Instanciate()
 	c, _ := DbStoreLinker.DB()
 	defer c.Close()
+	cron(intervals, DbStoreLinker)
+}
+
+func cron(intervalsInMinute int, DbStoreLinker *gorm.DB) {
 
 	providernasdaq := repository.ProviderNasdaqRespository(DbStoreLinker)
 	providerStock := repository.ProviderRespository(DbStoreLinker)
@@ -31,5 +36,14 @@ func cron(intervalsInMinute int) {
 		providerStock.GetStockDataFromProvider(nasdaq[i].Symbol, "Tpk_5367671f3afb40a78a02a8925e461a14")
 	}
 	time.Sleep(time.Duration(intervalsInMinute) * time.Minute)
-	cron(intervalsInMinute)
+	cron(intervalsInMinute, DbStoreLinker)
+}
+
+func GetConfig() map[string]string {
+	j, _ := os.Open("config.json")
+	defer j.Close()
+	b, _ := io.ReadAll(j)
+	var settings map[string]string
+	json.Unmarshal([]byte(b), &settings)
+	return settings
 }
